@@ -10,11 +10,18 @@ Two states are equivalent if they are either both empty or if both are not empty
 2) The non-member any_cast functions provide type-safe access to the contained object.
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+#include <iostream>
 #include <any>
 #include <functional>
-#include <iostream>
+#include <vector>
 
 using namespace std;
+
+struct Store
+{
+   Store() = delete;
+   Store(const Store& obj) = default;
+}
 
 int main() {
 	
@@ -27,13 +34,17 @@ int main() {
 	cout << std::any_cast<int&>(val) <<endl;
 
 	// put lambda into any
-    std::any value = [] { cout << "Hello Lambda" << endl;};
-    std::any_cast<lambda>(value)();  // gcc=11.1
+        std::any value = [] { cout << "Hello Lambda" << endl;};
+        std::any_cast<lambda>(value)();  // gcc=11.1
 	
 	// put lambda directly into any
 	auto a3 = std::make_any<lambda>([] { std::cout << "Lambda #2.\n"; });
-    std::cout << "a3.type() = \"" << a3.type().name() << "\"\n";
-    std::any_cast<lambda>(a3)();     // gcc=11.1
-    
+        std::cout << "a3.type() = \"" << a3.type().name() << "\"\n";
+        std::any_cast<lambda>(a3)();     // gcc=11.1
+
+        // putting into container
+        vector<any> v = {1, 3.1, "Hello", Store()};  // Instance of Store should be copy-constructable
+        cout << any_cast<int>(v[0]) <<endl;
+     
 	return 0;
 }
