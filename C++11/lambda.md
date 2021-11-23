@@ -31,3 +31,7 @@ auto f1 = [&x] { x = 2; }; // OK: x is a reference and modifies the original
 auto f2 = [x] { x = 2; }; // ERROR: the lambda can only perform const-operations on the captured value
 // vs.
 auto f3 = [x]() mutable { x = 2; }; // OK: the lambda can perform any operations on the captured value ```
+
+
+##Reference
+https://thispointer.com/designing-callbacks-in-c-part-3-c11-lambda-functions/
